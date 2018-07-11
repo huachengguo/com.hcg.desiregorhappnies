@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hcg.commondal.mapper.UserMapper">
+
+    <sql id="set">
+      <if test="id != null"> id=#{id},</if>
+      <if test="username != null"> username=#{username},</if>
+      <if test="address != null"> address=#{address},</if>
+      <if test="city != null"> city=#{city},</if>
+      <if test="sex != null"> sex=#{sex},</if>
+      <if test="email != null"> email=#{email},</if>
+      <if test="age != null"> age=#{age},</if>
+      <if test="phone != null"> phone=#{phone},</if>
+      <if test="password != null"> password=#{password},</if>
+      <if test="job != null"> job=#{job}</if>
+    </sql>
+
+    <sql id="condition">
+        <if test="id != null"> and id=#{id}</if>
+        <if test="username != null"> and username=#{username}</if>
+        <if test="address != null"> and address=#{address}</if>
+        <if test="city != null"> and city=#{city}</if>
+        <if test="sex != null">  and sex=#{sex}</if>
+        <if test="email != null">and  email=#{email}</if>
+        <if test="age != null"> and age=#{age}</if>
+        <if test="phone != null"> and phone=#{phone}</if>
+        <if test="password != null"> and password=#{password}</if>
+        <if test="job != null"> and job=#{job}</if>
+    </sql>
+
+    <sql id="baseColumn">
+        id,username,address,city,sex,email,age,phone,password,job
+    </sql>
+
+    <select id="selectAll" parameterType="com.hcg.commondal.model.UserInfo" resultType="com.hcg.commondal.model.UserInfo">
+        select * from  user_info
+    </select>
+
+    <select id="selectPage" parameterType="java.util.Map" resultType="com.hcg.commondal.model.UserInfo">
+        select * from user_info
+        <where>
+            <include refid="condition" />
+        </where>
+        limit (#{pageNum}-1)*20 ,#{pageNum}*20;
+    </select>
+
+    <select id="onlyOne" resultType="com.hcg.commondal.model.UserInfo" parameterType="com.hcg.commondal.model.UserInfo">
+        select * from user_info
+        <where>
+            <include refid="condition"/>
+        </where>
+        limit 1
+    </select>
+
+    <delete id="dropOne" parameterType="com.hcg.commondal.model.UserInfo">
+        delete from user_info
+        <where>
+            <include refid="condition"/>
+        </where>
+    </delete>
+
+    <delete id="dropMore" parameterMap="int">
+        delete from user_info where id in
+        <foreach item="empnoItem" collection="array" open="(" separator="," close=")">
+            #{list}
+        </foreach>
+    </delete>
+
+    <update id="updateOne" parameterType="com.hcg.commondal.model.UserInfo">
+        update user_info
+        <set>
+            <include refid="set"/>
+        </set>
+        <where>
+            <include refid="condition"/>
+        </where>
+    </update>
+
+    <insert id="insertOne" parameterType="com.hcg.commondal.model.UserInfo">
+        insert into user_info (<include refid="baseColumn"/>) value (<include refid="set"/>)
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into user_info (<include refid="baseColumn"/>) values
+        <foreach collection ="list" item="user" index= "index" separator =",">
+          #{user.username},#{user.address},#{user.city},#{user.sex},
+            #{user.email},#{user.age},#{user.phone},#{user.password},
+            #{user.job}
+        </foreach>
+    </insert>
+
+</mapper>
