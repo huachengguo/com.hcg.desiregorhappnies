@@ -44,6 +44,13 @@
         limit (#{pageNum}-1)*20 ,#{pageNum}*20;
     </select>
 
+    <select id="selectWithCondition" parameterType="com.hcg.commondal.model.UserInfo" resultType="com.hcg.commondal.model.UserInfo">
+        select * from user_info
+        <where>
+            <include refid="condition"/>
+        </where>
+    </select>
+
     <select id="onlyOne" resultType="com.hcg.commondal.model.UserInfo" parameterType="com.hcg.commondal.model.UserInfo">
         select * from user_info
         <where>

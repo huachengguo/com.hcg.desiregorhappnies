@@ -37,4 +37,7 @@ public class PageResp {
         this.msg = msg;
         this.object = object;
     }
+
+    public PageResp() {
+    }
 }

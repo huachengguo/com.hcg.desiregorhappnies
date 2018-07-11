@@ -1,15 +1,19 @@
 package com.hcg.commondal.mapper;
 
 import com.hcg.commondal.model.UserInfo;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
+@Component
 public interface UserMapper {
 
     List<UserInfo> selectAll();
 
     List<UserInfo> selectPage(Map map);
+
+    List<UserInfo> selectWithCondition(UserInfo userInfo);
 
     UserInfo onlyOne(UserInfo userInfo);
 
