@@ -2,7 +2,7 @@ package com.hcg.web.Vo;
 
 public class PageResp {
 
-    public Integer ErrorCode;
+    public Integer ErrorCode;   //-1  代表系统错误  0代表请求成功  1 代表请求成功返回错误异常
 
     public String msg;
 

@@ -6,6 +6,8 @@ import com.hcg.commonservice.webService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceimpl implements UserService {
 
@@ -34,5 +36,11 @@ public class UserServiceimpl implements UserService {
     public int dropOne(UserInfo userInfo) {
 
         return userMapper.dropOne(userInfo);
+    }
+
+    @Override
+    public List<UserInfo> selectWithCondition(UserInfo userInfo) {
+        List <UserInfo> list = userMapper.selectWithCondition(userInfo);
+        return list;
     }
 }
