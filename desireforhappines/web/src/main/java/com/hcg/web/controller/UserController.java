@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -19,9 +20,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/regesiter")
+    @RequestMapping(value = "/regesiter")
     @ResponseBody
-    public PageResp regesiter(@RequestBody UserInfo userInfo){
+    public PageResp regesiter(@RequestBody UserInfo userInfo ){
         PageResp resp = new PageResp();
         resp.setErrorCode(1);
         if (userInfo != null)
@@ -36,6 +37,7 @@ public class UserController {
             if (list.size()>0)
             {
                 resp.setMsg("账号已存在");
+                return resp;
             }
             int num = userService.insertOne(userInfo);
             if (num>0)

@@ -15,6 +15,9 @@ public class UserInfo implements Serializable {
     private String password;
     private String job;
 
+    public UserInfo() {
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +

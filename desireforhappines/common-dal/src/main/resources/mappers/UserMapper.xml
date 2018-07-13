@@ -12,11 +12,11 @@
       <if test="age != null"> age=#{age},</if>
       <if test="phone != null"> phone=#{phone},</if>
       <if test="password != null"> password=#{password},</if>
-      <if test="job != null"> job=#{job}</if>
+      <if test="job != null"> job=#{job},</if>
     </sql>
 
     <sql id="condition">
-        <if test="id != null"> and id=#{id}</if>
+        <if test="id != null"> id=#{id}</if>
         <if test="username != null"> and username=#{username}</if>
         <if test="address != null"> and address=#{address}</if>
         <if test="city != null"> and city=#{city}</if>
@@ -47,7 +47,7 @@
     <select id="selectWithCondition" parameterType="com.hcg.commondal.model.UserInfo" resultType="com.hcg.commondal.model.UserInfo">
         select * from user_info
         <where>
-            <include refid="condition"/>
+            <include refid="condition" />
         </where>
     </select>
 
@@ -59,16 +59,16 @@
         limit 1
     </select>
 
-    <delete id="dropOne" parameterType="com.hcg.commondal.model.UserInfo">
+   <delete id="dropOne" parameterType="com.hcg.commondal.model.UserInfo">
         delete from user_info
         <where>
             <include refid="condition"/>
         </where>
     </delete>
 
-    <delete id="dropMore" parameterMap="int">
-        delete from user_info where id in
-        <foreach item="empnoItem" collection="array" open="(" separator="," close=")">
+    <delete id="dropMore" parameterType="java.lang.Integer">-->
+        delete from user_info where id in-->
+        <foreach item="empnoItem" collection="array" open="(" separator="," close=")">-->
             #{list}
         </foreach>
     </delete>
@@ -84,7 +84,10 @@
     </update>
 
     <insert id="insertOne" parameterType="com.hcg.commondal.model.UserInfo">
-        insert into user_info (<include refid="baseColumn"/>) value (<include refid="set"/>)
+        insert into user_info
+        <set>
+           <include refid="set"/>
+        </set>
     </insert>
 
     <insert id="insertBatch" parameterType="java.util.List">

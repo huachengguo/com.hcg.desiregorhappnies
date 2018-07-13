@@ -18,24 +18,28 @@ public class UserServiceimpl implements UserService {
     public int insertOne(UserInfo userInfo) {
 
         return userMapper.insertOne(userInfo);
+//        return 0;
     }
 
     @Override
     public int updateOne(UserInfo userInfo) {
 
         return userMapper.updateOne(userInfo);
+//        return 0;
     }
 
     @Override
     public UserInfo selectOne(UserInfo userInfo) {
 
         return userMapper.onlyOne(userInfo);
+//        return null;
     }
 
     @Override
     public int dropOne(UserInfo userInfo) {
 
         return userMapper.dropOne(userInfo);
+//        return 0;
     }
 
     @Override
