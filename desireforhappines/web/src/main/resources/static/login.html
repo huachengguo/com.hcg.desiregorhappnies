@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body
+        {
+            text-align: center;
+            background:url("http://pic2016.ytqmx.com:82/2016/0307/9/11.jpg");
+        }
+        #mian
+        {
+            text-align: center;
+            /*border-radius: 20px;*/
+            width: 1000px;
+            height: 800px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .input-style
+        {
+
+            margin-left: 50px;
+            margin-top: 80px;
+            float: left;
+            width: auto;
+            text-align: center;
+
+        }
+        .input-style ul
+        {
+            margin-left: 30px;
+            margin-top: 50px;
+            position: relative;
+            left:50%;
+        }
+        .input-style ul li
+        {
+            position:relative;
+            left:-50%;
+        }
+        .input-label
+        {
+            postion:relative;
+            margin-top: 100px;
+            width: 600px;
+            height: 400px;
+            margin: auto;
+            bottom: 0;
+            background-color: cadetblue;
+            text-align: center;
+        }
+    </style>
+
+
+    <meta charset="UTF-8">
+    <title>欢迎前来登录</title>
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/color.css">
+    <!--<link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/demo/demo.css">-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript">
+        function regesiter() {
+            var url= "/user/regesiter";
+            var json= {"username":$("#username").val(),"phone":$("#phone").val(),"password":$("#password").val(),"age":$("#age").val(),"sex":$("#sex").val(),"email":$("#email").val(),"city":$("#city").val()};
+            var jsondata=JSON.stringify(json);
+            $.ajax({
+                type: 'post',
+                url: '/user/regesiter',
+                data: jsondata,
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data){
+                    debugger;
+                    if (data.ErrorCode==0)
+                    {
+                        alert(data.msg);
+                        location.reload();
+                    }
+                    $(".show-hide-errmsg").css("display","block").text(data.getmsg);
+                }
+            })
+        };
+        function login() {
+            var username=$("#user-name-label").val();
+            var password=$("#password-label").val();
+            $.ajax({
+                type:"post",
+                url:"/user/login",
+                data:{"username":username,"password":password},
+                dataType:"json",
+                // contentType:"application/json",
+                success:function (data) {
+                    if (data.ErrorCode==0)
+                    {
+                        alert(data.msg);
+                        debugger;
+                        window.location.href="/personal/";
+                    }
+                    alert(data.msg);
+                }
+            })
+        }
+        function getIndex() {
+
+        }
+    </script>
+</head>
+<body>
+        <div id ="mian">
+
+           <div class="easyui-layout" fit="true">
+
+                <div id="context" class="easyui-tabs" style="width:800px;height:600px;">
+
+                    <div title="登录" style="padding:20px;display:none;text-align: center">
+                        <form id="login-form" action="/user/login" method="post" style="text-align: center">
+                            <div id="login-user" style="padding: 5px 0; margin-top: 100px">
+                                <label for="user-name-label">账号:</label>
+                                <input type="text" id="user-name-label" name="username" style="width:260px;"/>
+                            </div>
+                            <div id="login-password" style="padding: 5px 0;margin-top: 30px">
+                                <label for="password-label">密码:</label>
+                                <input type="password" id="password-label" name="password" style="width:260px;"></input>
+                            </div>
+                            <div style="padding:5px 0;text-align: center;color: red;" id="showMsg"></div>
+                        </form>
+                        <div region="bottom" border="false" style="text-align:right;padding:5px 0; text-align: center;margin-top: 80px">
+                            <a class="easyui-linkbutton" iconCls="icon-blank" style="margin-right: 40px" onclick="login()">登录</a>
+                        </div>
+                        <!--<span class="login-hide-errmsg" style="display: none;margin-top: 50px" />-->
+                    </div>
+                    <div title="注册" style="overflow:auto;padding:20px;display:none;text-align: center">
+                       <form id="regesiter-form" style="text-align: center" method="post" action="/user/regesiter">
+                           <div class="input-label">
+                               <ul class="input-style" style="text-align: center">
+
+                                   <li style="padding: 5px 0">
+                                       <label for="username" class="username">用户名:</label>
+                                   </li>
+                                   <li style="padding: 5px 0">
+                                       <label for="phone" class="phone">手机:</label>
+                                   </li>
+                                   <li style="padding: 5px 0">
+                                       <label for="password" class="password">密码:</label>
+                                   </li>
+                                   <li style="padding: 5px 0">
+                                       <label for="age" class="age">年龄:</label>
+                                   </li>
+                                   <li style="padding: 5px 0">
+                                       <label for="email" class="email">邮箱:</label>
+                                   </li>
+                                   <li style="padding: 5px 0">
+                                       <label for="sex" class="sex">性别:</label>
+                                   </li>
+                                   <li style="padding: 5px 0">
+                                       <label for="city" class="city">所在城市:</label>
+                                   </li>
+                               </ul>
+                               <ul class="input-style" style="list-style: none">
+                                   <li><input type="text" id="username" class="username" name="username" style="width: 240px;padding: 5px 0"/></li>
+                                   <li><input type="text" id="phone" class="phone" name="phone" style="width: 240px;padding: 5px 0"/></li>
+                                   <li><input type="password" id="password" class="password" name="password" style="width: 240px;padding: 5px 0"/></li>
+                                   <li><input type="text" id="age" name="age" class="age" style="width: 240px;padding: 5px 0"/></li>
+                                   <li><input type="text" id="email" class="email" name="email" style="width: 240px;padding: 5px 0"/></li>
+                                   <li><input type="text" id="sex" name="sex"  class="sex" style="width: 240px;padding: 5px 0"/></li>
+                                   <li><input type="text" id="city" name="city" class="city" style="width: 240px;padding: 5px 0"/></li>
+                               </ul>
+                           </div>
+
+                           <!--<input type="submit" value="注册">-->
+                       </form>
+                        <input type="button" id="submit-register" onclick="regesiter()" style="background-color: darkgoldenrod" value="注册"/>
+                        <span class="show-hide-errmsg" style="display: none" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+</html>

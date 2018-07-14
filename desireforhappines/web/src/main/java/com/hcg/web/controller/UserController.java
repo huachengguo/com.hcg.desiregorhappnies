@@ -7,11 +7,12 @@ import com.hcg.web.Vo.PageResp;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -42,7 +43,7 @@ public class UserController {
             int num = userService.insertOne(userInfo);
             if (num>0)
             {
-                resp.setMsg("注册成功");
+                resp.setMsg("注册成功,快去登录吧");
                 resp.setErrorCode(0);
             }
         }
@@ -51,19 +52,31 @@ public class UserController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public PageResp getLogin(@RequestBody UserInfo userInfo)
+    public PageResp getLogin(HttpServletRequest request, HttpServletResponse response)
     {
         PageResp resp = new PageResp();
         resp.setErrorCode(1);
-        if (StringUtils.isEmpty(userInfo.getUsername())|| StringUtils.isEmpty(userInfo.getPassword()))
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        if (StringUtils.isEmpty(username)|| StringUtils.isEmpty(password))
         {
             resp.setErrorCode(1);
             resp.setMsg("账号或密码不能为空");
             return resp;
         }
-        UserInfo user= userService.selectOne(userInfo);
+        UserInfo param = new UserInfo();
+        param.setUsername(username);
+        param.setPassword(password);
+        UserInfo user= userService.selectOne(param);
         if (user != null)
         {
+            Cookie cookies = new Cookie("username",username);
+            cookies.setMaxAge(1800);
+            cookies.setPath("/");
+            response.addCookie(cookies);
+            HttpSession session = request.getSession();
+            session.setAttribute("username",username);
+            session.setMaxInactiveInterval(300);
             resp.setErrorCode(0);
             resp.setMsg("登录成功");
         }else
@@ -71,6 +84,11 @@ public class UserController {
             resp.setMsg("账号密码错");
         }
         return resp;
+    }
+    @RequestMapping()
+    public String index()
+    {
+        return "/login.html";
     }
 
 }
