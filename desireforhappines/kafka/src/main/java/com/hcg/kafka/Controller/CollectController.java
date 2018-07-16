@@ -37,7 +37,7 @@ public class CollectController {
     @RequestMapping(value = "/consume")
     public String consume()
     {
-        try {
+       /* try {
             Consume consume = new Consume();
             //启动kafka消费
             consume.start();
@@ -49,7 +49,8 @@ public class CollectController {
         {
             return e.toString();
         }
-       return "消费成功啦";
+       return "消费成功啦";*/
+       return null;
     }
 
 }
