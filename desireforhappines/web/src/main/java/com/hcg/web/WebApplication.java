@@ -13,5 +13,6 @@ public class WebApplication {
     public static void main(String[] args) {
         System.out.println("启动成功!");
         SpringApplication.run(WebApplication.class, args);
-    }
+        }
+
 }

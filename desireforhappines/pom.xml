@@ -23,6 +23,7 @@
         <module>common-service</module>
         <module>common-util</module>
         <module>kafka</module>
+        <module>rocket-mq</module>
     </modules>
 
     <properties>
@@ -132,7 +133,6 @@
                 <artifactId>json</artifactId>
                 <version>20180130</version>
             </dependency>
-s
 
             <!--   &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams &ndash;&gt;
                <dependency>
@@ -156,7 +156,17 @@ s
                 <version>2.8.5</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-common</artifactId>
+                <version>4.2.0</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>4.2.0</version>
+            </dependency>
 
 
         </dependencies>
