@@ -86,10 +86,9 @@ public class RocketmqAutoConfiguration {
         producer.setCheckThreadPoolMaxSize(2);
         // 队列数
         producer.setCheckRequestHoldMax(2000);
+        //设置发送失败的重试次数为3
+        producer.setRetryTimesWhenSendFailed(3);
 
-        //TODO 由于社区版本的服务器阉割调了消息回查的功能，所以这个地方没有意义
-        //TransactionCheckListener transactionCheckListener = new TransactionCheckListenerImpl();
-        //producer.setTransactionCheckListener(transactionCheckListener);
 
         /**
          * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br>
@@ -111,10 +110,10 @@ public class RocketmqAutoConfiguration {
          * 注意：ConsumerGroupName需要由应用来保证唯一
          */
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroupName);
-        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_MAX_OFFSET);
+        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         consumer.setNamesrvAddr(properties.getNamesrvAddr());
         consumer.setInstanceName(properties.getConsumerInstanceName());
-        consumer.setConsumeMessageBatchMaxSize(1);//设置批量消费，以提升消费吞吐量，默认是1
+        consumer.setConsumeMessageBatchMaxSize(5);//设置批量消费，以提升消费吞吐量，默认是1
 
 
         /**
@@ -125,8 +124,7 @@ public class RocketmqAutoConfiguration {
             consumer.subscribe(sunscribe.split(":")[0], sunscribe.split(":")[1]);
         }
 
-        consumer.registerMessageListener((List<MessageExt> msgs, ConsumeConcurrentlyContext context) -> {
-
+       /* consumer.registerMessageListener((List<MessageExt> msgs, ConsumeConcurrentlyContext context) -> {
 
                 for (MessageExt msg : msgs) {
 
@@ -150,25 +148,26 @@ public class RocketmqAutoConfiguration {
                 }
             //如果没有return success，consumer会重复消费此信息，直到success。
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-        });
-        /*consumer.registerMessageListener(new MessageListenerConcurrently() {
+        });*/
+        consumer.registerMessageListener(new MessageListenerConcurrently() {
 
 
-            @Override
+
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-                *//*System.out.printf(Thread.currentThread().getName() + " Receive New Messages: " + msgs + "%n");
-                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;*//*
+                //*System.out.printf(Thread.currentThread().getName() + " Receive New Messages: " + msgs + "%n");
+//                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 for (MessageExt msg : msgs) {
                     System.out.println("messageExt: " + msg);//输出消息内容
                     try {
                         String messageBody = new String(msg.getBody(), RemotingHelper.DEFAULT_CHARSET);
                         System.out.println("消费响应：msgId : " + msg.getMsgId() + ",  msgBody : " + messageBody);//输出消息内容
 //                        this.publisher.publishEvent(new RocketmqEvent(msg,consumer));
+                        publisher.publishEvent(new RocketmqEvent(msg,consumer));
                         System.out.println(Thread.currentThread().getName() + " Receive New Messages: " + msgs.size());
                         System.out.println("消息到达事件已经发布成功！");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        if(msg.getReconsumeTimes()<=3){//重复消费3次
+                        if(msg.getReconsumeTimes()<=3){//重复消费3次（主动请求重复消费）
                             //TODO 进行日志记录
                             System.out.println("稍后再试");
                             return ConsumeConcurrentlyStatus.RECONSUME_LATER;
@@ -181,7 +180,7 @@ public class RocketmqAutoConfiguration {
                 }
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
-        });*/
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {

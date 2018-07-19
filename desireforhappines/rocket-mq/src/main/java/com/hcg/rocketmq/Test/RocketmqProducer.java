@@ -18,10 +18,16 @@ public class RocketmqProducer {
     @Autowired
     TransactionMQProducer transactionProducer;
 
+    static int i;
     public void sendMsg(String topic,String tag,String keys,String body)
     {
         Message msg = new Message(topic, tag, keys,body.getBytes());
         try {
+            if (i==10)
+            {
+                System.out.println("这儿抛出异常了");
+                throw new RuntimeException();
+            }
             defaultProducer.send(msg, new SendCallback() {
 
                 @Override
@@ -33,10 +39,12 @@ public class RocketmqProducer {
                 @Override
                 public void onException(Throwable e) {
                     System.out.println("消息发送失败");
+                    i++;
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
+            //日志记录
         }
 
     }

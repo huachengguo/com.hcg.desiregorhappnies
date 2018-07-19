@@ -12,7 +12,7 @@ public class RocketmqController {
     RocketmqProducer rocketmqProducer;
     @RequestMapping()
     public void sendmsg(){
-        for (int i=0;i<3;i++)
+        for (int i=0;i<30;i++)
         {
             String body = "这是roctmq发送出来的信息-------->"+i;
             rocketmqProducer.sendMsg("test","hcg",i+"",body);

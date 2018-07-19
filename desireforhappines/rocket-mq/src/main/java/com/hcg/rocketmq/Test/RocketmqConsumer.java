@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RocketmqConsumer {
-    @Value("${rocketmq.consumerGroupName}")
-    private String pushConsumer;
     @Value("${rocketmq.namesrvAddr}")
     private String namesrvAddr;
     @Value("${rocketmq.consumer.topic}")
@@ -38,7 +36,7 @@ public class RocketmqConsumer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-      /*  DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(pushConsumer);
+      /*  DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroupName);
 
         //指定NameServer地址，多个地址以 ; 隔开
         consumer.setNamesrvAddr(namesrvAddr);
