@@ -1,6 +1,5 @@
 package com.hcg.kafka.kafkaConfig;
 
-import com.hcg.kafka.Consume.TopicPartitionThread;
 import com.hcg.kafka.util.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;

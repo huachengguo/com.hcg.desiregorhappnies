@@ -41,7 +41,7 @@ public class TopicPartitionThread extends Thread {
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringSerializer");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Arrays.asList("test001", "test002"),
+        consumer.subscribe(Arrays.asList("test", "test001"),
                 new ConsumerRebalanceListener(){
 
                     @Override

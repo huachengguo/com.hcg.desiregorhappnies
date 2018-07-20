@@ -1,6 +1,7 @@
 package com.hcg.kafka.Controller;
 
 import com.hcg.kafka.kafkaConfig.Consume;
+import com.hcg.kafka.util.SendMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,23 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/kafka")
 public class CollectController {
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private KafkaTemplate kafkaTemplate;
+    @Autowired
+    private SendMessages sendMessages;
 
-    @RequestMapping(value = "/send", method = RequestMethod.GET)
-    public String sendKafka(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/send")
+    public String sendKafka() {
         try {
-            String message = request.getParameter("message");
-            logger.info("kafka的消息={}",message);
-            kafkaTemplate.send("test", "key", message);
+//            String message = request.getParameter("message");
+            for (int i=0; i<20;i++)
+            {
+                sendMessages.sendMessage("test1","这是在生产消息"+i);
+            }
+/*            logger.info("kafka的消息={}",message);
+            kafkaTemplate.send("test1", "key", message);*/
             logger.info("发送kafka成功.");
             return "发送kafka成功";
         } catch (Exception e) {

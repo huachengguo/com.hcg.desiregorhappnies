@@ -2,13 +2,15 @@ package com.hcg.kafka.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SendMessages {
     @Autowired
-    private static KafkaTemplate kafkaTemplate;
+    KafkaTemplate kafkaTemplate;
 
 
-    public static void sendMessage(String topic,String message)
+    public void sendMessage(String topic,String message)
     {
         try
         {
